@@ -1,0 +1,646 @@
+---
+########################
+# Kubez-ansible Options
+########################
+network_interface: "eth0"
+api_interface: "{{ network_interface }}"
+api_interface_address: "{{ hostvars[inventory_hostname]['ansible_' + api_interface]['ipv4']['address'] }}"
+
+# kubernetes 镜像仓库地址，默认阿里云，用户可根据实际情况配置
+image_repository: "registry.cn-hangzhou.aliyuncs.com/google_containers"
+
+enable_registry: "no"
+registry_server: 127.0.0.1:4000
+registry_namespace: "kubernetes"
+registry_repo: "{{ registry_server }}/{{ registry_namespace }}"
+
+#####################
+# keepalived options
+#####################
+# Arbitrary unique number from 0..255
+keepalived_virtual_router_id: "68"
+
+#####################
+# Kubernetes Options
+#####################
+kube_application_dir: "/tmp/pixiuspace"
+kubez_namespace: pixiu-system
+
+# This should be a VIP, an unused IP on your network that will float between
+# the hosts running keepalived for high-availability.
+kube_vip_address: ""
+
+# Listen port for kubernetes.
+# 启用 haproxy + keepalived 时, 监听端口推荐使用 8443
+kube_vip_port: 6443
+
+ingress_node_port: 30006
+ingress_tls_node_port: 30008
+
+cluster_cidr: "172.30.0.0/16"
+service_cidr: "10.254.0.0/16"
+
+# Kubernetes network cni options
+enable_flannel: "{{ not enable_calico | bool }}"
+enable_calico: "no"
+
+# Kubernetes csi options
+enable_pixiu_localstorage: "yes"
+
+enable_kubernetes: "yes"
+enable_kubernetes_ha: "no"
+enable_haproxy: "no"
+enable_metrics_server: "yes"
+enable_rbd_provisioner: "no"
+enable_ingress_nginx: "yes"
+
+# Addon helm charts
+kube_release: 1.23.6
+kube_release_ubuntu: 1.23.6-00
+kubernetes_version: "v{{ kube_release }}"
+
+##################
+# Runtime Options
+##################
+# runtime docker version
+# 通过 apt-cache madison docker-ce 查找合适版本
+docker_release: ""
+# runtime containerd version
+containerd_release: ""
+
+docker_package_rocky: "docker-ce{{'' if docker_release == '' else '-' ~ docker_release }}"
+containerd_package_rocky: "containerd.io{{'' if containerd_release == '' else '-' ~ containerd_release }}"
+
+docker_package_ubuntu: "docker-ce{{'' if docker_release == '' else '=' ~ docker_release }}"
+containerd_package_ubuntu: "containerd{{'' if containerd_release == '' else '=' ~ containerd_release }}"
+
+docker_package_debian: "docker-ce{{'' if docker_release == '' else '=' ~ docker_release }}"
+containerd_package_debian: "containerd.io{{'' if containerd_release == '' else '=' ~ containerd_release }}"
+
+node_config_directory: "/etc/kubez/"
+
+# kubernetes node-role
+control_labels:
+  - node-role.kubernetes.io/master
+  - node-role.kubernetes.io/control-plane
+
+kube_repo: "{{ registry_repo if enable_registry | bool else image_repository }}"
+
+kube_applications:
+  # pixiu-system should exists before the other applications created
+  - name: pixiu-system
+    enabled: "yes"
+  - name: kube-flannel
+    enabled: "{{ enable_flannel | bool }}"
+  - name: kube-calico
+    enabled: "{{ enable_calico | bool }}"
+  - name: metrics-server
+    enabled: "{{ enable_metrics_server | bool }}"
+  - name: nfs-csi
+    enabled: "{{ enable_nfs_csi | bool }}"
+  - name: rbd-provisioner
+    enabled: "{{ enable_rbd_provisioner | bool }}"
+  - name: ingress-nginx
+    enabled: "{{ enable_ingress_nginx | bool }}"
+  - name: kubez-autoscaler
+    enabled: "{{ enable_hpav2 | bool }}"
+    # TODO: 临时解决方案，最终可通过调用 preStart 的 webhook 解决
+  - name: olm-crds
+    enabled: "{{ enable_olm | bool }}"
+  - name: olm
+    enabled: "{{ enable_olm | bool }}"
+  - name: postgres
+    enabled: "{{ enable_postgres | bool }}"
+  - name: redis
+    enabled: "{{ enable_redis | bool }}"
+  - name: mongodb
+    enabled: "{{ enable_mongodb | bool }}"
+  - name: kafka
+    enabled: "{{ enable_kafka | bool }}"
+  - name: rabbitmq
+    enabled: "{{ enable_rabbitmq | bool }}"
+  - name: helm
+    enabled: "{{ enable_helm | bool }}"
+  - name: pixiu-localstorage
+    enabled: "{{ enable_pixiu_localstorage | bool }}"
+
+#####################
+# Application Images
+#####################
+rbd_provisioner_url: "{{ registry_server if enable_registry | bool else 'quay.io' }}"
+rbd_provisioner_image: "{{ rbd_provisioner_url }}/external_storage/rbd-provisioner"
+
+###############
+# Helm Options
+###############
+enable_helm: "yes"
+
+# v3.5.2 and v3.9.0 is available, default is v3.9.0
+helm_release: v3.9.0
+helm_image: "jacky06/helm-toolbox:{{ helm_release }}"
+
+#######################
+# StorageClass Options
+#######################
+enable_nfs: "yes"
+enable_nfs_csi: "{{ enable_nfs }}"
+
+nfs_cidr: "*"
+
+nfs_storage_class: managed-nfs-storage
+nfs_server: "{{ hostvars[groups['storage'][0]]['ansible_' + api_interface]['ipv4']['address'] }}"
+nfs_share: /data/share
+
+pool_name: kube
+user_id: "{{ pool_name }}"
+
+# Ceph monitors, comma delimited. This parameter is required.
+monitors: 172.16.60.102:6789
+
+# ceph auth get-key client.admin | base64
+admin_key: QVFDTWhUcGVVUWZrRXhBQUwyVTNMdTdQSk5WRkxUMTczb3ovcFE9PQ==
+
+# ceph osd pool create pool_name 8 8
+# ceph auth add client.pool_name mon 'allow r' osd 'allow rwx pool=pool_name'
+# ceph auth get-key client.pool_name | base64
+ceph_key: QVFCdzN6NWVGMjJCTFJBQVcvMkU2a051UW1JSHU1VTRXZ2ZEd3c9PQ==
+
+#####################
+# Prometheus Options
+#####################
+# https://github.com/prometheus-operator/kube-prometheus
+# version is v0.6.0
+enable_prometheus: "no"
+prometheus_namespace: "{{ kubez_namespace }}"
+
+###############
+# Minio Options
+###############
+# https://github.com/minio/minio
+enable_minio: "no"
+
+minio_name: minio
+minio_namespace: "{{ kubez_namespace }}"
+
+minio_storage_class: managed-nfs-storage
+minio_storage_size: 500Gi
+# 生产环境推荐 16Gi
+minio_memory_size: 4Gi
+# applicable only for MinIO distributed mod
+# 生产环境推荐 16
+minio_replicas: 4
+
+# 用户名和密码
+minio_rootUser: minioadmin
+minio_rootPassword: minioadmin
+
+#################
+# Grafana Options
+#################
+enable_grafana: "no"
+grafana_namespace: "{{ kubez_namespace }}"
+
+# Customize grafana user and password
+grafana_admin_user: admin
+grafana_admin_password: admin
+
+##############
+# Loki Options
+##############
+enable_loki: "no"
+loki_namespace: "{{ kubez_namespace }}"
+
+# Storage class to be used
+loki_storage_class: managed-nfs-storage
+# Size of persistent disk
+loki_storage_size: 10Gi
+# Should authentication be enabled
+loki_auth_enabled: 'false'
+
+# Number of replicas
+loki_commonConfig_replication_factor_number: 2
+
+# Number of customized loki read-write replicas
+loki_read_replicas_number: 3
+loki_write_replicas_number: 3
+
+# Storage config
+loki_storage_bucketNames_chunks: chunks
+loki_storage_bucketNames_ruler: ruler
+loki_storage_bucketNames_admin: admin
+
+# S3 config
+s3:
+  endpoint: http://172.17.16.13:9000
+  secretAccessKey: minioadmin
+  accessKeyId: minioadmin
+  s3ForcePathStyle: true
+  insecure: true
+
+##################
+# promtail Options
+##################
+enable_promtail: "no"
+promtail_namespace: "{{ kubez_namespace }}"
+
+# loki server
+loki_url: http://loki-gateway/loki/api/v1/push
+
+########################
+# Elasticsearch Options
+########################
+# The Fluentd, elasticsearch, and kibana will be installed when enabled.
+enable_elasticsearch: "no"
+elasticsearch_name: elasticsearch
+elasticsearch_namespace: "{{ kubez_namespace }}"
+elasticsearch_chart_version: 8.5.1
+
+elasticsearch_replicas: 1 # 生产环境推荐 3 副本
+minimum_master_nodes: 1 # 生产环境至少为 2 节点
+
+###################
+# Filebeat Options
+###################
+enable_filebeat: "no"
+filebeat_name: filebeat
+filebeat_namespace: "{{ kubez_namespace }}"
+filebeat_chart_version: 8.5.1
+
+#################
+# Kibana Options
+#################
+enable_kibana: "no"
+kibana_name: kibana
+kibana_namespace: "{{ kubez_namespace }}"
+kibana_chart_version: 8.5.1
+
+kibana_replicas: 1
+
+##################
+# Fluentd Options
+##################
+enable_fluentd: "no"
+fluentd_name: fluentd
+fluentd_namespace: "{{ kubez_namespace }}"
+fluentd_chart_version: 0.3.9
+
+###########################
+# Kubez-autoscaler Options
+###########################
+enable_hpav2: "no"
+
+##################
+# Jenkins Options
+##################
+enable_jenkins: "no"
+
+jenkins_namespace: "{{ kubez_namespace }}"
+jenkins_storage_class: managed-nfs-storage
+jenkins_storage_size: "8Gi"
+
+# The initial password for admin
+initial_admin_password: "admin123456"
+
+#################
+# Harbor Options
+#################
+enable_harbor: "no"
+harbor_name: harbor
+harbor_namespace: "{{ kubez_namespace }}"
+
+harbor_storage_class: managed-nfs-storage
+harbor_storage_size: "5Gi"
+harbor_admin_password: "Harbor12345"
+
+expose_http_nodeport: 30011
+expose_notary_nodeport: 30012
+
+# Setting it to "keep" to avoid removing PVCs during a helm delete
+# operation. Leaving it empty will delete PVCs after the chart deleted
+# (this does not apply for PVCs that are created for internal database
+# and redis components, i.e. they are never deleted automatically)
+harbor_resource_policy: " "
+
+# Valid options are [ ingress, nodePort ]
+expose_type: nodePort
+expose_core_domain: core.harbor.kubez.com
+expose_notary_domain: notary.harbor.kubez.com
+
+####################################
+# Operator-Lifecycle-Manager Options
+####################################
+enable_olm: "no"
+
+##################
+# Postgres Options
+##################
+enable_postgres: "no"
+
+postgres_name: postgres
+postgress_namespace: operators
+
+###############
+# Redis Options
+###############
+enable_redis: "no"
+
+redis_name: redis
+redis_namespace: operators
+
+##################
+# Postgres Options
+##################
+enable_mongodb: "no"
+
+mongodb_name: mongodb
+mongodb_namespace: operators
+###############
+# kafka Options
+###############
+enable_kafka: "no"
+
+kafka_name: kafka
+kafka_namespace: operators
+
+##################
+# RabbitMQ Options
+##################
+enable_rabbitmq: "no"
+
+rabbitmq_name: rabbitmq
+rabbitmq_namespace: operators
+
+################
+# Istio Options
+################
+enable_istio: "no"
+istio_chart_version: 1.16.1
+
+####################
+# Dashboard Options
+####################
+enable_dashboard: "no"
+dashboard_chart_version: 6.0.0
+
+dashboard_name: kubernetes-dashboard
+dashboard_namespace: "{{ kubez_namespace }}"
+dashboard_vip_address: ""
+dashboard_node_port: 30001
+
+##########################
+# Helm Chart Applications
+##########################
+enable_charts:
+  - name: minio
+    enabled: "{{ enable_minio | bool }}"
+  - name: prometheus
+    enabled: "{{ enable_prometheus | bool }}"
+  - name: grafana
+    enabled: "{{ enable_grafana | bool }}"
+  - name: loki
+    enabled: "{{ enable_loki | bool }}"
+  - name: promtail
+    enabled: "{{ enable_promtail | bool }}"
+  - name: jenkins
+    enabled: "{{ enable_jenkins | bool }}"
+  - name: harbor
+    enabled: "{{ enable_harbor | bool }}"
+  - name: istio-base
+    enabled: "{{ enable_istio | bool}}"
+  - name: istiod
+    enabled: "{{ enable_istio | bool}}"
+  - name: dashboard
+    enabled: "{{ enable_dashboard | bool }}"
+  - name: elasticsearch
+    enabled: "{{ enable_elasticsearch | bool }}"
+  - name: kibana
+    enabled: "{{ enable_kibana | bool }}"
+  - name: filebeat
+    enabled: "{{ enable_filebeat | bool }}"
+  - name: fluentd
+    enabled: "{{ enable_fluentd | bool }}"
+
+charts:
+  prometheus:
+    name: prometheus
+    namespace: "{{ prometheus_namespace }}"
+    repository:
+      name: prometheus-community
+      url: https://prometheus-community.github.io/helm-charts
+    chart:
+      path: prometheus-community/prometheus
+      version: 15.9.2
+    chart_extra_vars:
+      server.persistentVolume.enabled: 'false' # 必须是字符串格式，否则会被 helm_toolbox 模块忽略
+      alertmanager.persistentVolume.enabled: 'false'
+      # 以 kube-state-metrics 为前缀设置子 chart kube-state-metrics 的属性
+      kube-state-metrics.image.repository: jacky06/kube-state-metrics
+    chart_extra_flags:
+      - create-namespace
+
+  grafana:
+    name: grafana
+    namespace: "{{ grafana_namespace }}"
+    repository:
+      name: grafana
+      url: https://grafana.github.io/helm-charts
+    chart:
+      path: grafana/grafana
+      version: 6.29.6
+    chart_extra_vars: # 如果没有 extra_vars，需留空
+      adminUser: "{{ grafana_admin_user }}"
+      adminPassword: "{{ grafana_admin_password }}"
+    chart_extra_flags:
+      - create-namespace
+  loki:
+    name: loki
+    namespace: "{{ loki_namespace }}"
+    repository:
+      name: grafana
+      url: https://grafana.github.io/helm-charts
+    chart:
+      path: grafana/loki
+      version: 4.6.1
+    chart_extra_vars:
+      loki.auth_enabled: "{{ loki_auth_enabled }}"
+      loki.storage.bucketNames.chunks: "{{ loki_storage_bucketNames_chunks }}"
+      loki.storage.bucketNames.ruler: "{{ loki_storage_bucketNames_ruler }}"
+      loki.storage.bucketNames.admin: "{{ loki_storage_bucketNames_admin }}"
+      loki.storage.s3.endpoint: "{{ s3['endpoint'] }}"
+      loki.storage.s3.secretAccessKey: "{{ s3['secretAccessKey'] }}"
+      loki.storage.s3.accessKeyId: "{{ s3['accessKeyId'] }}"
+      loki.storage.s3.s3ForcePathStyle: "{{ s3['s3ForcePathStyle'] }}"
+      loki.storage.s3.insecure: "{{ s3['insecure'] }}"
+      loki.commonConfig.replication_factor: "{{ loki_commonConfig_replication_factor_number }}"
+      read.persistence.storageClass: "{{ loki_storage_class }}"
+      write.persistence.storageClass: "{{ loki_storage_class }}"
+      backend.persistence.storageClass: "{{ loki_storage_class }}"
+      singleBinary.persistence.storageClass: "{{ loki_storage_class }}"
+      read.persistence.size: "{{ loki_storage_size }}"
+      write.persistence.size: "{{ loki_storage_size }}"
+      backend.persistence.size: "{{ loki_storage_size }}"
+      singleBinary.persistence.size: "{{ loki_storage_size }}"
+      read.replicas: "{{ loki_read_replicas_number }}"
+      write.replicas: "{{ loki_write_replicas_number }}"
+    chart_extra_flags:
+      - create-namespace
+
+  promtail:
+    name: promtail
+    namespace: "{{ promtail_namespace }}"
+    repository:
+      name: grafana
+      url: https://grafana.github.io/helm-charts
+    chart:
+      path: grafana/promtail
+      version: 6.8.3
+    chart_extra_vars:
+      config.clients[0].url: "{{ loki_url }}"
+    chart_extra_flags:
+      - create-namespace
+
+  jenkins:
+    name: jenkins
+    namespace: "{{ jenkins_namespace }}"
+    repository:
+      name: jenkinsci
+      url: https://charts.jenkins.io/
+    chart:
+      path: jenkinsci/jenkins
+      version: 4.2.20
+    chart_extra_vars:
+      persistence.storageClass: "{{ jenkins_storage_class }}"
+      persistence.size: "{{ jenkins_storage_size }}"
+      controller.adminPassword: "{{ initial_admin_password }}"
+
+  harbor:
+    name: "{{ harbor_name }}"
+    namespace: "{{ harbor_namespace }}"
+    repository:
+      name: harbor
+      url: https://helm.goharbor.io
+    chart:
+      path: harbor/harbor
+      version: 1.11.0
+    chart_extra_vars:
+      expose.type: "{{ expose_type }}"
+      expose.tls.enabled: 'false'
+      harborAdminPassword: "{{ harbor_admin_password }}"
+      expose.nodePort.ports.http.nodePort: "{{ '' if expose_type == 'ingress' else expose_http_nodeport }}"
+      expose.nodePort.ports.notary.nodePort: "{{ '' if expose_type == 'ingress' else expose_notary_nodeport }}"
+      expose.ingress.hosts.core: "{{ expose_core_domain if expose_type == 'ingress' else '' }}"
+      expose.ingress.hosts.notary: "{{ expose_notary_domain if expose_type == 'ingress' else '' }}"
+      persistence.persistentVolumeClaim.registry.storageClass: "{{ harbor_storage_class }}"
+      persistence.persistentVolumeClaim.chartmuseum.storageClass: "{{ harbor_storage_class }}"
+      persistence.persistentVolumeClaim.jobservice.scanDataExports.storageClass: "{{ harbor_storage_class }}"
+      persistence.persistentVolumeClaim.jobservice.jobLog.storageClass: "{{ harbor_storage_class }}"
+      persistence.persistentVolumeClaim.database.storageClass: "{{ harbor_storage_class }}"
+      persistence.persistentVolumeClaim.redis.storageClass: "{{ harbor_storage_class }}"
+      persistence.persistentVolumeClaim.trivy.storageClass: "{{ harbor_storage_class }}"
+      persistence.persistentVolumeClaim.registry.size: "{{ harbor_storage_size }}"
+      persistence.persistentVolumeClaim.chartmuseum.size: "{{ harbor_storage_size }}"
+      persistence.persistentVolumeClaim.database.size: "{{ harbor_storage_size }}"
+      persistence.persistentVolumeClaim.redis.size: "{{ harbor_storage_size }}"
+      persistence.persistentVolumeClaim.trivy.size: "{{ harbor_storage_size }}"
+      persistence.resourcePolicy: "{{ harbor_resource_policy }}"
+      externalURL: "{{ 'https://' if expose_type == 'ingress' else 'http://' }}{{ expose_core_domain if expose_type == 'ingress' else hostvars[groups['kube-master'][0]]['ansible_' + network_interface]['ipv4']['address'] }}{{ '' if expose_type == 'ingress' else ':' }}{{ '' if expose_type == 'ingress' else expose_http_nodeport }}"
+
+  istio-base:
+    name: istio-base
+    namespace: istio-system
+    repository:
+      name: istio
+      url: https://istio-release.storage.googleapis.com/charts
+    chart:
+      path: istio/base
+      version: "{{ istio_chart_version }}"
+    chart_extra_flags:
+      - create-namespace
+    chart_extra_vars: {}
+  istiod:
+    name: istiod
+    namespace: istio-system
+    repository:
+      name: istio
+      url: https://istio-release.storage.googleapis.com/charts
+    chart:
+      path: istio/istiod
+      version: "{{ istio_chart_version }}"
+    chart_extra_flags:
+      - create-namespace
+    chart_extra_vars: {}
+
+  dashboard:
+    name: "{{ dashboard_name }}"
+    namespace: "{{ dashboard_namespace }}"
+    repository:
+      name: kubernetes-dashboard
+      url: https://kubernetes.github.io/dashboard/
+    chart:
+      path: kubernetes-dashboard/kubernetes-dashboard
+      version: "{{ dashboard_chart_version }}"
+    chart_extra_vars: {}
+
+  elasticsearch:
+    name: "{{ elasticsearch_name }}"
+    namespace: "{{ elasticsearch_namespace }}"
+    repository:
+      name: elastic
+      url: https://helm.elastic.co
+    chart:
+      path: elastic/elasticsearch
+      version: "{{ elasticsearch_chart_version }}"
+    chart_extra_vars:
+      replicas: "{{ elasticsearch_replicas }}"
+      minimumMasterNodes: "{{ minimum_master_nodes }}"
+      persistence.enabled: "false" # 暂时关闭，后续启用 storageclass
+  kibana:
+    name: "{{ kibana_name }}"
+    namespace: "{{ kibana_namespace }}"
+    repository:
+      name: elastic
+      url: https://helm.elastic.co
+    chart:
+      path: elastic/kibana
+      version: "{{ kibana_chart_version }}"
+    chart_extra_vars:
+      replicas: "{{ kibana_replicas }}"
+  filebeat:
+    name: "{{ filebeat_name }}"
+    namespace: "{{ filebeat_namespace }}"
+    repository:
+      name: elastic
+      url: https://helm.elastic.co
+    chart:
+      path: elastic/filebeat
+      version: "{{ filebeat_chart_version }}"
+    chart_extra_vars: {}
+  fluentd:
+    name: "{{ fluentd_name }}"
+    namespace: "{{ fluentd_namespace }}"
+    repository:
+      name: fluent
+      url: https://fluent.github.io/helm-charts
+    chart:
+      path: fluent/fluentd
+      version: "{{ fluentd_chart_version }}"
+    chart_extra_vars: {}
+
+  # https://artifacthub.io/packages/helm/minio-official/minio
+  minio:
+    name: "{{ minio_name }}"
+    namespace: "{{ minio_namespace }}"
+    repository:
+      name: minio
+      url: https://charts.min.io/
+    chart:
+      path: minio/minio
+      version: 5.0.7
+    chart_extra_vars:
+      persistence.enabled: 'true'
+      resources.requests.memory: "{{ minio_memory_size }}"
+      persistence.storageClass: "{{ minio_storage_class }}"
+      persistence.size: "{{ minio_storage_size }}"
+      replicas: "{{ minio_replicas }}"
+      rootUser: "{{ minio_rootUser }}"
+      rootPassword: "{{ minio_rootPassword }}"
