@@ -36,13 +36,14 @@
         {% endfor %}
   become: True
 
-- name: Install epel-release packages
-  yum:
-    name: epel-release
-    state: present
+- name: Copy offline repos for nodes
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  loop:
+    - {"src": offline.repo.j2, "dest": /etc/yum.repos.d/offline.repo, os: "CentOS"}
   when:
-    - inventory_hostname in groups['kubernetes']
-    - ansible_distribution == 'Rocky'
+    - ansible_distribution == item.os
 
 - name: Install dependent packages for kubernetes nodes
   package:
@@ -61,7 +62,7 @@
   when:
     - change_selinux | bool
     - inventory_hostname in groups['baremetal']
-    - ansible_distribution == 'Rocky'
+    - ansible_distribution == 'CentOS'
 
 # Try to stop and disable delegated service,
 # let it go when not exists.
@@ -74,7 +75,7 @@
   loop: "{{ services_to_disabled }}"
   when:
     - inventory_hostname in groups['baremetal']
-    - ansible_distribution == 'Rocky'
+    - ansible_distribution == 'CentOS'
 
 - name: Disable ufw service
   service:
