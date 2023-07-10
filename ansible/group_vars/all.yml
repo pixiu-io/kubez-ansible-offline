@@ -129,6 +129,7 @@ kube_applications:
 #####################
 rbd_provisioner_url: "{{ registry_server if enable_registry | bool else 'quay.io' }}"
 rbd_provisioner_image: "{{ rbd_provisioner_url }}/external_storage/rbd-provisioner"
+flannel-cni-plugin_image: "{{}}"
 
 ###############
 # Helm Options
