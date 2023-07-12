@@ -6,7 +6,7 @@ To provide quick deployment tools for kubernetes cluster and cloud native applic
 [![Release][release-image]][release-url]
 [![License][license-image]][license-url]
 
-This session has been tested on Rocky 8.5, Debian 11 and Ubuntu 20.04+ which supported by python3.
+This session has been tested on Centos7
 
 More distribution supported see [more](https://github.com/gopixiu-io/kubez-ansible/tree/stable/tiger)
 
@@ -14,6 +14,9 @@ More distribution supported see [more](https://github.com/gopixiu-io/kubez-ansib
 Learn about Kubez Ansible by reading the documentation online [kubez-ansible](https://www.bilibili.com/video/BV1L84y1h7LE/).
 
 ## Supported Components
+- 离线部署指南
+  - [离线组件准备](docs/install/offline.md) 离线组件下载
+
 - 集群指南
   - [单节点集群](docs/install/all-in-one.md) 单节点集群的快速部署
   - [高可用集群](docs/install/multinode.md) 多节点和高可用集群部署
