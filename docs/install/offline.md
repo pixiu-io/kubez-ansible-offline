@@ -82,7 +82,7 @@
      ```bash
      解压 "kubez-ansible"
      yum -y install unzip
-     unzip  kubez-ansible-offline-master.zip  
+     unzip  kubez-ansible-offline-master.zip
      ```
    - 安装 `kubez-ansible`
      ```bash
