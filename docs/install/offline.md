@@ -55,7 +55,7 @@
 4. 制作 `yum` 仓库
    - 添加yum仓库
      ```bash
-     vi /etc/yum.repos.d/pixiu.rep
+     vi /etc/yum.repos.d/pixiu.repo
      # 仓库内容 IP 更换为系统当前使用 IP
      [basenexus]
      name=Nexus Yum Repository
