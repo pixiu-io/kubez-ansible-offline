@@ -16,7 +16,7 @@
 
    - 下载镜像包
      ```bash
-     curl -fL "https://pixiupkg-generic.pkg.coding.net/pixiu/k8simagepkg/k8s-centos7-v1.23.17_images.tar.gz?version=latest" -o k8s-centos7-v1.23.17_images.tar.gz
+     curl -fL  https://pixiupkg-generic.pkg.coding.net/pixiu/allimagedownload/allimagedownload.tar.gz?version=latest -o k8s-centos7-v1.23.17_images.tar.gz
      ```
 2. 安装 `nexus`
 
