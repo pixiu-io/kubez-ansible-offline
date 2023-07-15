@@ -26,7 +26,8 @@ network_interface: "eth0"
 
 # kubernetes 镜像仓库地址，默认阿里云，用户可根据实际情况配置
 image_repository: "registry.cn-hangzhou.aliyuncs.com/google_containers"
-image_repository_daemon: ""
+
+image_repository_daemon: ""0.0.0.0/0"
 
 # 离线部署时，指定 yum 源地址
 yum_baseurl: "http://192.168.16.210:58000/repository/yuminstall"
