@@ -39,7 +39,7 @@
    - 上传镜像包
      ```bash
      tar zxvf k8s-centos7-v1.23.17_images.tar.gz
-     cd k8s-centos7-v1.23.17_images
+     cd allimagedownload
 
      # 导入的时候，传入你部署机的 IP
      sh load_image.sh  192.168.17.47
