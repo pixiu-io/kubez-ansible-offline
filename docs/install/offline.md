@@ -48,9 +48,9 @@
   tar zxvf k8s-centos7-v1.23.17_images.tar.gz
   cd allimagedownload
   sh load_image.sh $NexusIp
-  
+
   # 切换到离线包同级目录
-  cd ~ 
+  cd ~
   tar zxvf k8s-v1.23.17-rpm.tar.gz
   cd localrepo
   sh push_rpm.sh $NexusIp
@@ -66,13 +66,10 @@ cat > /etc/yum.repos.d/pixiu.repo << EOF
 name=Pixiuio Repository
 baseurl=http://192.168.16.210:58000/repository/pixiuio-centos/
 enabled=1
-gpgcheck=0   
+gpgcheck=0
 EOF
 
-# 清除之前 yum 仓库缓存
-yum clean all
-# 重新构建 yum 仓库缓存
-yum makecache
+yum clean all && yum makecache
 ```
 
 3. 安装 `kubez-ansible`
