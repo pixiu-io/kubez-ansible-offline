@@ -4,7 +4,7 @@
 - `1C2G+`
 
 ### 依赖条件
-- [依赖安装](prerequisites.md)
+- [离线包准备](offline.md)
 
 ### 部署步骤
 1. 检查虚拟机默认网卡配置
@@ -23,21 +23,21 @@
    ```
 
 3. (可选) 修改默认的 `cri`
-- 默认的 `cri` 为 `containerd`, 如果期望修改为 `docker`, 则
+- 离线安装时，默认的 `cri` 为 `docker`, 如果期望修改为 `containerd`, 则
   - `Centos` 修改 `/usr/share/kubez-ansible/ansible/inventory/all-in-one`
   - `Ubuntu` 修改 `/usr/local/share/kubez-ansible/ansible/inventory/all-in-one`
 
-- 移除 `containerd-master` 和 `containerd-node` 的主机信息, 并添加在 `docker` 分组中, 调整后效果如下:
+- 移除 `docker-master` 和 `docker-node` 的主机信息, 并添加在 `containerd` 分组中, 调整后效果如下:
   ```shell
   [docker-master]
-  localhost       ansible_connection=local
 
   [docker-node]
-  localhost       ansible_connection=local
 
   [containerd-master]
+  localhost       ansible_connection=local
 
   [containerd-node]
+  localhost       ansible_connection=local
   ```
 
 4. (可选)修改 kubernetes 镜像仓库

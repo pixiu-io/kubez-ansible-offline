@@ -2,6 +2,7 @@
 
 ### 离线包获取
   ```shell
+  cd ~
   USER="ptx9sk7vk7ow:003a1d6132741b195f332b815e8f98c39ecbcc1a"
   URL="https://pixiupkg-generic.pkg.coding.net"
 
@@ -21,6 +22,7 @@
 #### 启动 `nexus` 服务
 1. 启动 `nexus` 服务
   ```shell
+  cd ~
   tar -zxvf nexus.tar.gz
 
   cd  nexus_local/
@@ -91,4 +93,11 @@ python setup.py install
 ```shell
 kubez-ansible
 Usage: /usr/bin/kubez-ansible COMMAND [options]
+```
+
+5. 准备配置文件
+```shell
+cp -r etc/kubez/ /etc/
+cp ansible/inventory/multinode ~
+cp ~
 ```
