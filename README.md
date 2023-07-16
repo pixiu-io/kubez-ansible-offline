@@ -12,7 +12,7 @@ This session has been tested on Centos7 which supported by python2.7
 Learn about Kubez Ansible by reading the documentation online [kubez-ansible](https://www.bilibili.com/video/BV1L84y1h7LE/).
 
 ## Supported Components
-- 离线物料包准备
+- 离线包准备
   - [离线包准备](docs/install/offline.md)
 
 - 集群指南
