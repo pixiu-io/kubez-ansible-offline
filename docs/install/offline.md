@@ -79,7 +79,6 @@ yum -y install ansible unzip python2-pip
 # 解压 kubez-ansible 包
 unzip kubez-ansible-offline-master.zip
 cd kubez-ansible-offline-master
-
 # 安装依赖
 pip install pip/pbr-5.11.1-py2.py3-none-any.whl
 
