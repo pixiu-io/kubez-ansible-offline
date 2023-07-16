@@ -8,6 +8,7 @@ api_interface_address: "{{ hostvars[inventory_hostname]['ansible_' + api_interfa
 
 # kubernetes 镜像仓库地址，默认阿里云，用户可根据实际情况配置
 image_repository: "registry.cn-hangzhou.aliyuncs.com/google_containers"
+image_repository_daemon: "{{ image_repository_daemon }}"
 
 enable_registry: "no"
 registry_server: 127.0.0.1:4000
