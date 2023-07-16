@@ -80,7 +80,7 @@ yum -y install ansible unzip python2-pip
 unzip kubez-ansible-offline-master.zip
 cd kubez-ansible-offline-master
 
-# 安装依赖的 pbr
+# 安装依赖
 pip install pip/pbr-5.11.1-py2.py3-none-any.whl
 
 cp tools/git /usr/local/bin && git init
