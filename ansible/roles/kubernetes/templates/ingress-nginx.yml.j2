@@ -410,7 +410,6 @@ spec:
               fieldPath: metadata.namespace
         - name: LD_PRELOAD
           value: /usr/local/lib/libmimalloc.so
-        #image: jacky06/nginx-ingress-controller:v1.2.0
         image: {{ image_repository }}/nginx-ingress-controller:v1.2.0
         imagePullPolicy: IfNotPresent
         lifecycle:
