@@ -67,15 +67,19 @@
   when:
     - ansible_distribution == item.os
 
-- name: Run 'Initialize yum source' command
+- name: Clear Cache Yum
   yum:
     name: '*'
     state: absent
     disable_gpg_check: yes
+  when:
+    - ansible_distribution == "CentOS"
 
+- name: Make Cache
   yum:
     name: '*'
     state: present
+    disable_gpg_check: yes
   when:
     - ansible_distribution == "CentOS"
 
