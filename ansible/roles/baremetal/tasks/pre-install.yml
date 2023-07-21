@@ -37,25 +37,25 @@
   become: True
 
 - name: mkdir yumrepos dir
-  file: 
+  file:
     path: /root/oldyum_back
     state: directory
   when:
     - ansible_distribution == "CentOS"
- 
+
 - name: Find all files in /etc/yum.repos.d/
   find:
     paths: /etc/yum.repos.d/
     file_type: file
     recurse: no
   register: found_files
-  when: 
+  when:
     - ansible_distribution == "CentOS"
 
 - name: Move files to destination directory
   command: mv "{{ item.path }}" /root/oldyum_back/
   loop: "{{ found_files.files }}"
-  when: 
+  when:
     - ansible_distribution == "CentOS"
 
 - name: Copy offline repos for nodes
@@ -72,6 +72,7 @@
     name: '*'
     state: absent
     disable_gpg_check: yes
+
   yum:
     name: '*'
     state: present
