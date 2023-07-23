@@ -99,5 +99,5 @@ Usage: /usr/bin/kubez-ansible COMMAND [options]
 ```shell
 cp -r etc/kubez/ /etc/
 cp ansible/inventory/multinode ~
-cp ~
+cd ~
 ```
