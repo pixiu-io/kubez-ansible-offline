@@ -51,9 +51,20 @@
 
 4. 打通`部署节点`(运行 `kubez-ansible` 的节点) 到其他 `node` 节点的免密登陆 [批量开启免密登陆](auth-key.md)
 
-5. (可选)修改 kubernetes 镜像仓库
+5. 修改 /etc/kubez/globals.yml 配置文件
     ``` bash
-    编辑 /etc/kubez/globals.yml 文件，修改 image_repository: "" 为期望镜像仓库，默认是阿里云 registry.cn-hangzhou.aliyuncs.com/google_containers
+    修改 kube_release: 为指定 Kubernetes 版本
+    kube_release: 1.23.17
+
+   修改 image_repository: "" 为本地镜像仓库
+   image_repository: "192.168.16.210:58001/pixiuio"
+
+   修改 yum_baseurl: “” 为本地 yum 仓库地址
+   yum_baseurl: "http://192.168.16.210:58000/repository/pixiuio-centos"
+
+   修改 docker_release: "" 为指定版本 24.0.4
+   docker_release: "24.0.4"
+
     ```
 
 6. 执行如下命令，进行 `kubernetes` 的依赖安装
