@@ -36,25 +36,22 @@
         {% endfor %}
   become: True
 
-- name: mkdir yumrepos dir
+- name: Mkdir old_yumrepos dir
   file:
     path: /root/oldyum_back
     state: directory
   when:
     - ansible_distribution == "CentOS"
 
-- name: Find all files in /etc/yum.repos.d/
-  find:
-    paths: /etc/yum.repos.d/
-    file_type: file
-    recurse: no
-  register: found_files
+- name: Move files to destination directory
+  command: mv /etc/yum.repos.d/   /root/oldyum_back/
   when:
     - ansible_distribution == "CentOS"
 
-- name: Move files to destination directory
-  command: mv "{{ item.path }}" /root/oldyum_back/
-  loop: "{{ found_files.files }}"
+- name: Mkdir yumrepos dir
+  file:
+    path: /etc/yum.repos.d/
+    state: directory
   when:
     - ansible_distribution == "CentOS"
 
@@ -69,17 +66,7 @@
 
 - name: Clear Cache Yum
   yum:
-    name: '*'
-    state: absent
-    disable_gpg_check: yes
-  when:
-    - ansible_distribution == "CentOS"
-
-- name: Make Cache
-  yum:
-    name: '*'
-    state: present
-    disable_gpg_check: yes
+    update_cache: yes
   when:
     - ansible_distribution == "CentOS"
 
