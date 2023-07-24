@@ -45,6 +45,8 @@
 
 - name: Move files to destination directory
   command: mv /etc/yum.repos.d/   /root/oldyum_back/
+  args:
+    creates: /root/oldyum_back/yum.repos.d
   when:
     - ansible_distribution == "CentOS"
 
