@@ -56,11 +56,11 @@
     修改 kube_release: 为指定 Kubernetes 版本
     kube_release: 1.23.17
 
-   修改 image_repository: "" 为本地镜像仓库
-   image_repository: "192.168.16.210:58001/pixiuio"
+    修改 image_repository: "" 为本地镜像仓库
+    image_repository: "192.168.16.210:58001/pixiuio"
 
-   修改 yum_baseurl: “” 为本地 yum 仓库地址
-   yum_baseurl: "http://192.168.16.210:58000/repository/pixiuio-centos"
+    修改 yum_baseurl: “” 为本地 yum 仓库地址
+    yum_baseurl: "http://192.168.16.210:58000/repository/pixiuio-centos"
 
     ```
 
