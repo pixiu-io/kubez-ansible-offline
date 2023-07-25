@@ -36,14 +36,14 @@
         {% endfor %}
   become: True
 
-- name: Move files to destination directory
-  command: mv /etc/yum.repos.d/  /etc/yum.repos.d.bak
+- name: Backup /etc/yum.repos.d if necessary
+  command: mv /etc/yum.repos.d /etc/yum.repos.d.bak
   args:
     creates: /etc/yum.repos.d.bak
   when:
     - ansible_distribution == "CentOS"
 
-- name: Mkdir yumrepos dir
+- name: Ensure /etc/yum.repos.d exists
   file:
     path: /etc/yum.repos.d/
     state: directory
@@ -59,7 +59,7 @@
   when:
     - ansible_distribution == item.os
 
-- name: Update Cache Yum
+- name: Update yum cache
   yum:
     update_cache: yes
   when:
