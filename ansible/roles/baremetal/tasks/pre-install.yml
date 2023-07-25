@@ -59,7 +59,7 @@
   when:
     - ansible_distribution == item.os
 
-- name: Clear Cache Yum
+- name: Update Cache Yum
   yum:
     update_cache: yes
   when:
