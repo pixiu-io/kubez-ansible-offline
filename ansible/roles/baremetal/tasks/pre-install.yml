@@ -36,6 +36,20 @@
         {% endfor %}
   become: True
 
+- name: Backup /etc/yum.repos.d if necessary
+  command: mv /etc/yum.repos.d /etc/yum.repos.d.bak
+  args:
+    creates: /etc/yum.repos.d.bak
+  when:
+    - ansible_distribution == "CentOS"
+
+- name: Ensure /etc/yum.repos.d exists
+  file:
+    path: /etc/yum.repos.d
+    state: directory
+  when:
+    - ansible_distribution == "CentOS"
+
 - name: Copy offline repos for nodes
   template:
     src: "{{ item.src }}"
@@ -44,6 +58,12 @@
     - {"src": offline.repo.j2, "dest": /etc/yum.repos.d/offline.repo, os: "CentOS"}
   when:
     - ansible_distribution == item.os
+
+- name: Update yum cache
+  yum:
+    update_cache: yes
+  when:
+    - ansible_distribution == "CentOS"
 
 - name: Install dependent packages for kubernetes nodes
   package:
