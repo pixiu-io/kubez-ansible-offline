@@ -45,7 +45,7 @@
 
 - name: Ensure /etc/yum.repos.d exists
   file:
-    path: /etc/yum.repos.d/
+    path: /etc/yum.repos.d
     state: directory
   when:
     - ansible_distribution == "CentOS"
