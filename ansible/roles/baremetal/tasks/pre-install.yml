@@ -36,17 +36,10 @@
         {% endfor %}
   become: True
 
-- name: Mkdir old_yumrepos dir
-  file:
-    path: /root/oldyum_back
-    state: directory
-  when:
-    - ansible_distribution == "CentOS"
-
 - name: Move files to destination directory
-  command: mv /etc/yum.repos.d/   /root/oldyum_back/
+  command: mv /etc/yum.repos.d/  /etc/yum.repos.d.bak
   args:
-    creates: /root/oldyum_back/yum.repos.d
+    creates: /etc/yum.repos.d.bak
   when:
     - ansible_distribution == "CentOS"
 
