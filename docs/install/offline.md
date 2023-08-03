@@ -37,8 +37,6 @@ kubez-ansible-offline-master.zip
 nexus.tar.gz
 ```
 
-
-
 ## 二、 部署机操作
 
 部署机IP为  192.168.17.38
@@ -56,7 +54,6 @@ sh base.sh install
 当前时间: 16:53:09   nexus服务正在启动.............
 当前时间: 16:53:09   nexus服务正在启动.............
  当前时间: 16:53:09 服务启动成功！
-
 
 访问：
 ```shell
@@ -76,7 +73,6 @@ LOCALIP="192.168.153.10" 改为 LOCALIP="192.168.17.38"
 # 2. 上传镜像和软件包
 sh base.sh push all
 
-
 单独上传镜像可以用  sh base.sh push image
 单独上传rpm可以用  sh base.sh push rpm
 ```
@@ -85,7 +81,6 @@ sh base.sh push all
 
 ```shell
 sh base.sh kubezansible all
-
 
 单独设置nexus repo 可以用  sh base.sh kubezansible repo
 单独安装kubez-ansible可以用 sh base.sh kubezansible install
