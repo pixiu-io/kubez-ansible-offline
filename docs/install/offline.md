@@ -67,8 +67,9 @@ http://ip:58001   用户名: admin  密码: admin123
 ### 2. 上传镜像和软件包
 
 ```shell
-# 1. 根据本机ip,修改base.sh LOCALIP的值
-LOCALIP="192.168.153.10" 改为 LOCALIP="192.168.17.38"
+# 1. 修改下面LOCALIP的值
+LOCALIP="xxx.xxx.xxx.xxx"
+sed -i "s/LOCALIP=\"localhost\"/LOCALIP=\"${LOCALIP}\"/g" base.sh
 
 # 2. 上传镜像和软件包
 sh base.sh push all
