@@ -2,7 +2,7 @@
 # author: shujiangle
 
 # 本机ip
-LOCALIP="192.168.17.30"
+LOCALIP="localhost"
 
 # 镜像版本
 IMAGETAG="1.23.17"
@@ -281,6 +281,7 @@ kubezansibleInstall() {
     cp -r etc/kubez/ /etc/
     cp ansible/inventory/multinode ~
     cd ~
+	fi
 fi
 }
 
