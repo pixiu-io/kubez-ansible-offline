@@ -77,7 +77,7 @@ http://ip:58001   用户名: admin  密码: admin123
 ```shell
 sh base.sh push all     # 上传全部 rpm 包和所需镜像到 nexus 仓库
 sh bash.sh push rpm     # 上传 rpm 包
-sh bash.sh push image   # 上传 images 
+sh bash.sh push image   # 上传 images
 ```
 
 ### 3. 设置 `nexus repo` 和安装 `kubez-ansible`
