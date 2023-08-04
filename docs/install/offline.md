@@ -48,7 +48,7 @@ vim bash.sh
 # 本机ip
 LOCALIP="localhost"     #修改为本机 IP 地址
 ```
-- 安装 nexus 
+- 安装 nexus
 ```shell
 sh base.sh install
 ```
