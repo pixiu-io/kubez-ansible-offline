@@ -2,7 +2,7 @@
 # author: shujiangle
 
 # 本机ip
-LOCALIP="localhost"
+LOCALIP="192.168.17.30"
 
 # 镜像版本
 IMAGETAG="1.23.17"

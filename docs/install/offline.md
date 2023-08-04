@@ -18,13 +18,13 @@ sh base.sh download all
 # 下载nexus
 sh base.sh download nexus
 
-# 下载rpm离线包 
+# 下载rpm离线包
 sh base.sh download rpm
 
-# 载镜像包
+# 下载镜像包
 sh base.sh download image
 
-# 载kubez-ansible 离线包
+# 下载kubez-ansible 离线包
 sh base.sh download kubez
 ```
 
@@ -53,9 +53,10 @@ sh base.sh install
 当前时间: 16:53:09   nexus服务正在启动.............
 当前时间: 16:53:09   nexus服务正在启动.............
 当前时间: 16:53:09   nexus服务正在启动.............
- 当前时间: 16:53:09 服务启动成功！
+当前时间: 16:53:09 服务启动成功！
 
-访问：
+访问
+
 ```shell
 # 访问nexus
 http://ip:58000   用户名: admin  密码: admin123
@@ -95,3 +96,4 @@ Copying kubez_ansible.egg-info to /usr/lib/python2.7/site-packages/kubez_ansible
 running install_scripts
 copying build/scripts-2.7/kubez-ansible -> /usr/bin
 changing mode of /usr/bin/kubez-ansible to 755
+
