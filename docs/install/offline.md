@@ -1,40 +1,37 @@
-# 离线包准备
+# 离线环境初始化
 
-## 一、离线包获取
+## 离线包获取
 
-### 1. `base.sh` 脚本下载
+### 获取 `base.sh` 脚本
 ```shell
-curl https://raw.githubusercontent.com/gopixiu-io/kubez-ansible-offline/master/tools/base.sh | bash
+curl https://raw.githubusercontent.com/gopixiu-io/kubez-ansible-offline/master/tools/base.sh -o bash.sh
 ```
 
-### 2. 下载所有离线包
+### 下载离线包
+根据实际情况选择全量或单独下载
+- 全量下载
+    ```shell
+    sh base.sh download all
+    ```
+
+- 单独下载 (网络不佳可单独下载)
+    ```shell
+    # 下载 nexus
+    sh base.sh download nexus
+
+    # 下载 rpm 离线包
+    sh base.sh download rpm
+
+    # 下载镜像包
+    sh base.sh download image
+
+    # 下载 kubez-ansible 离线包
+    sh base.sh download kubez
+    ```
+
+### 拷贝所有包至内网部署机
 ```shell
-sh base.sh download all
-```
-
-- 单独下载包 ，可以用下面命令(网络不佳可单独下载)
-
-```shell
-# 下载nexus
-sh base.sh download nexus
-
-# 下载rpm离线包
-sh base.sh download rpm
-
-# 下载镜像包
-sh base.sh download image
-
-# 下载kubez-ansible 离线包
-sh base.sh download kubez
-```
-
-### 3. 拷贝下面所有包至内网部署机
-```shell
-base.sh
-k8s-centos7-v1.23.17_images.tar.gz
-k8s-v1.23.17-rpm.tar.gz
-kubez-ansible-offline-master.zip
-nexus.tar.gz
+base.sh k8s-centos7-v1.23.17_images.tar.gz k8s-v1.23.17-rpm.tar.gz kubez-ansible-offline-master.zip nexus.tar.gz
 ```
 
 ## 二、 部署机操作
