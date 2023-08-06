@@ -1,4 +1,9 @@
-#!/bin/bash
+#!/usr/bin/env bash
+#
+# Bootstrap script to install kubernetes env.
+#
+# This script is intended to be used for install kubernetes env.
+
 # author: shujiangle
 
 # 本机ip
@@ -103,7 +108,6 @@ downloadRpm() {
 			curl -fL -u $USER $URL/pixiu/k8soffline/k8s-v$IMAGETAG-rpm.tar.gz?version=latest -o k8s-v${IMAGETAG}-rpm.tar.gz
 		fi
 	fi
-
 }
 
 downloadImage() {
@@ -238,8 +242,8 @@ kubezansible() {
 }
 
 kubezansibleRepo() {
-
 	printChangeIp
+
 	mkdir -p /etc/yum.repos.d/repobak
 	mv /etc/yum.repos.d/*.repo /etc/yum.repos.d/repobak
 
@@ -255,10 +259,8 @@ EOF
 }
 
 kubezansibleInstall() {
-
   # 判断ip是否修改
 	printChangeIp
-
 
   if command -v "kubez-ansible" >/dev/null; then
     echo "kubez-ansible 命令已经安装"
