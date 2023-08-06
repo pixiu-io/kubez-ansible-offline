@@ -1,103 +1,90 @@
-# 离线包准备
+# 离线环境初始化
 
-### 离线包获取
+## 离线包获取
+
+### 获取 `base.sh` 脚本
+```shell
+curl https://raw.githubusercontent.com/gopixiu-io/kubez-ansible-offline/master/tools/base.sh -o bash.sh
+```
+
+### 下载离线包
+根据实际情况选择全量或单独下载
+- 全量下载
+    ```shell
+    sh base.sh download all
+    ```
+
+- 单独下载 (网络不佳可单独下载)
+    ```shell
+    # 下载 nexus
+    sh base.sh download nexus
+
+    # 下载 rpm 离线包
+    sh base.sh download rpm
+
+    # 下载镜像包
+    sh base.sh download image
+
+    # 下载 kubez-ansible 离线包
+    sh base.sh download kubez
+    ```
+
+### 拷贝所有包至内网部署机
   ```shell
-  cd ~
-  USER="ptx9sk7vk7ow:003a1d6132741b195f332b815e8f98c39ecbcc1a"
-  URL="https://pixiupkg-generic.pkg.coding.net"
-
-  # 准备 nexus 离线包
-  curl -fL -u $USER $URL/pixiu/k8soffline/nexus.tar.gz?version=latest -o nexus.tar.gz
-  # 准备 rpm 离线包
-  curl -fL -u $USER $URL/pixiu/k8soffline/k8s-v1.23.17-rpm.tar.gz?version=latest -o k8s-v1.23.17-rpm.tar.gz
-  # 准备镜像离线包
-  curl -fL -u $USER $URL/pixiu/allimagedownload/allimagedownload.tar.gz?version=latest -o k8s-centos7-v1.23.17_images.tar.gz
-
-  # 准备 kubez-ansible 离线包
-  curl https://codeload.github.com/gopixiu-io/kubez-ansible-offline/zip/refs/heads/master -o kubez-ansible-offline-master.zip
+  [root@pixiu ~]# ls
+  base.sh  k8s-centos7-v1.23.17_images.tar.gz  k8s-v1.23.17-rpm.tar.gz  kubez-ansible-offline-master.zip  nexus.tar.gz
   ```
 
-### 初始化
+## 部署机操作
 
-#### 启动 `nexus` 服务
-1. 启动 `nexus` 服务
+### 部署私有仓库
+- 修改 `base.sh` 脚本内容
   ```shell
-  cd ~
-  tar -zxvf nexus.tar.gz
-
-  cd  nexus_local/
-  sh nexus.sh start
-
-  # 当前时间: 23:20:37 服务启动成功！
+  vim bash.sh
+  # 本机ip
+  LOCALIP="localhost"     #修改为本机 IP 地址
   ```
 
-2. 验证
+- 安装 nexus
   ```shell
-  # 访问nexus
+  sh base.sh install
+  ```
+- 安装完成结果显示
+  ```shell
+  当前时间: 16:53:09 nexus服务正在启动.............
+  当前时间: 16:53:09 服务启动成功！
+  ```
+
+- 访问测试
+  ```shell
+  # 访问 nexus
   http://ip:58000   用户名: admin  密码: admin123
-
-  # nexus搭建镜像仓库地址
+  # nexus 搭建镜像仓库地址
   http://ip:58001   用户名: admin  密码: admin123
   ```
-![nexus](../img/nexus.png)
 
-3. 上传镜像和软件包
+### 上传镜像和软件包
   ```shell
-  NexusIp=192.168.16.210
+  # 全部上传
+  sh base.sh push all     # 上传全部 rpm 包和所需镜像到 nexus 仓库
 
-  # 切换到离线包同级目录
-  cd ~
-  tar zxvf k8s-centos7-v1.23.17_images.tar.gz
-  cd allimagedownload
-  sh load_image.sh $NexusIp
-
-  # 切换到离线包同级目录
-  cd ~
-  tar zxvf k8s-v1.23.17-rpm.tar.gz
-  cd localrepo
-  sh push_rpm.sh $NexusIp
+  # 或者单独上传
+  sh bash.sh push rpm     # 上传 rpm 包
+  sh bash.sh push image   # 上传 images
   ```
 
-#### 初始化部署节点
-1. 拷贝 `kubez-ansible-offline-master.zip` 到部署节点
+### 设置 `nexus repo` 和安装 `kubez-ansible`
+  ```shell
+  # 全部设置
+  sh base.sh kubezansible all     # 设置 nexus repo 以及安装 kubez-ansible
 
-2. 设置 `yum` 源
-```shell
-cat > /etc/yum.repos.d/pixiu.repo << EOF
-[basenexus]
-name=Pixiuio Repository
-baseurl=http://192.168.16.210:58000/repository/pixiuio-centos/
-enabled=1
-gpgcheck=0
-EOF
+  # 或者单独设置
+  sh base.sh kubezansible repo    # 设置 nexus repo
+  sh base.sh kubezansible install # 安装 kubez-ansible
+  ```
 
-yum clean all && yum makecache
-```
-
-3. 安装 `kubez-ansible`
-```shell
-# 安装依赖包
-yum -y install ansible unzip python2-pip
-# 解压 kubez-ansible 包
-unzip kubez-ansible-offline-master.zip
-cd kubez-ansible-offline-master
-# 安装依赖
-pip install pip/pbr-5.11.1-py2.py3-none-any.whl
-
-cp tools/git /usr/local/bin && git init
-# 执行安装
-python setup.py install
-```
-
-4. 验证
-```shell
-kubez-ansible
-Usage: /usr/bin/kubez-ansible COMMAND [options]
-```
-
-5. 准备配置文件
-```shell
-cp -r etc/kubez/ /etc/
-cp ansible/inventory/multinode ~
-cd ~
-```
+### 验证
+  ```shell
+  kubez-ansible
+  Usage: /usr/bin/kubez-ansible COMMAND [options]
+  ```
