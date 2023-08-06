@@ -79,7 +79,7 @@ containerd_release: ""
 #############################
 # Pixiu-localstorage Options
 #############################
-#enable_pixiu_localstorage: "yes"
+#enable_pixiu_localstorage: "no"
 
 #enable_rbd_provisioner: "no"
 #pool_name: kube
