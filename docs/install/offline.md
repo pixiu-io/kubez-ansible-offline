@@ -4,7 +4,7 @@
 
 ### 获取 `base.sh` 脚本
 ```shell
-curl https://raw.githubusercontent.com/gopixiu-io/kubez-ansible-offline/master/tools/base.sh -o bash.sh
+curl https://raw.githubusercontent.com/gopixiu-io/kubez-ansible-offline/master/tools/base.sh -o base.sh
 ```
 
 ### 下载离线包
