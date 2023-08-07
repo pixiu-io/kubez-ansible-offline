@@ -260,7 +260,7 @@ EOF
 	yum clean all && yum makecache
 }
 
-kubezansibleInstall() {ru
+kubezansibleInstall() {
   # 判断ip是否修改
 	printChangeIp
 
