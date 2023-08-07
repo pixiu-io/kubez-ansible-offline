@@ -244,10 +244,12 @@ kubezansible() {
 kubezansibleRepo() {
 	printChangeIp
 
-	mkdir -p /etc/yum.repos.d/repobak
-	mv /etc/yum.repos.d/*.repo /etc/yum.repos.d/repobak
+  [ -d "/etc/yum.repos.d.bak" ] && echo "/etc/yum.repos.d.bak  备份目录存在，无需备份" && exit 0
+  mv /etc/yum.repos.d /etc/yum.repos.d.bak
+	mkdir -p /etc/yum.repos.d
 
-	cat >/etc/yum.repos.d/pixiu.repo <<EOF
+	[ -f "/etc/yum.repos.d/offline.repo" ] && echo "/etc/yum.repos.d/offline.repo 文件存在，无需再创建" && exit 0
+	cat >/etc/yum.repos.d/offline.repo <<EOF
 [basenexus]
 name=Pixiuio Repository
 baseurl=http://${LOCALIP}:58000/repository/pixiuio-centos/
@@ -258,7 +260,7 @@ EOF
 	yum clean all && yum makecache
 }
 
-kubezansibleInstall() {
+kubezansibleInstall() {ru
   # 判断ip是否修改
 	printChangeIp
 
@@ -268,6 +270,7 @@ kubezansibleInstall() {
   else
     cd $PKGPWD
     # 安装依赖包
+		yum makecache
     yum -y install ansible unzip python2-pip
     # 解压 kubez-ansible 包
 		if [ ! -d "kubez-ansible-offline-master" ]; then
