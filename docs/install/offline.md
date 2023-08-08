@@ -40,7 +40,7 @@ curl https://raw.githubusercontent.com/gopixiu-io/kubez-ansible-offline/master/t
 ### 部署私有仓库
 - 修改 `base.sh` 脚本内容
   ```shell
-  vim bash.sh
+  vim base.sh
   # 本机ip
   LOCALIP="localhost"     #修改为本机 IP 地址
   ```
@@ -75,9 +75,6 @@ curl https://raw.githubusercontent.com/gopixiu-io/kubez-ansible-offline/master/t
 
 ### 设置 `nexus repo` 和安装 `kubez-ansible`
   ```shell
-  # make cache
-  yum makecache
-
   # 全部设置
   sh base.sh kubezansible all     # 设置 nexus repo 以及安装 kubez-ansible
 
