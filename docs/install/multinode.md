@@ -89,9 +89,9 @@
    ```bash
    [root@kube01 ~]# kubectl get node
    NAME     STATUS   ROLES                  AGE     VERSION
-   kube01   Ready    control-plane,master   21h     v1.23.6
-   kube02   Ready    <none>                 21h     v1.23.6
-   kube03   Ready    <none>                 3h48m   v1.23.6
+   kube01   Ready    control-plane,master   21h     v1.23.17
+   kube02   Ready    <none>                 21h     v1.23.17
+   kube03   Ready    <none>                 3h48m   v1.23.17
    ```
 
 10. (可选)启用 kubectl 命令行补全
