@@ -257,7 +257,7 @@ enabled=1
 gpgcheck=0
 EOF
 
-	yum clean all && yum makecache
+	yum clean all && rm -rf /var/cache/yum/* && yum makecache
 }
 
 kubezansibleInstall() {
