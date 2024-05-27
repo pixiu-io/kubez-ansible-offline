@@ -160,6 +160,7 @@ check_nexus_status() {
 # 安装nexus
 installNexus() {
 	check_nexus_status
+	check_memory
 	if [ ! -f "nexus.tar.gz" ]; then
 		echo "nexus安装包不存在，请下载"
 		exit 1
@@ -171,6 +172,20 @@ installNexus() {
 	# 启动服务
 	sh nexus.sh start
 }
+
+check_memory() {
+    mem_total_kb=$(grep MemTotal /proc/meminfo | awk '{print $2}')
+    mem_total_gb=$(echo "scale=2; $mem_total_kb / 1024 / 1024" | bc)
+    required_mem_gb=4.0
+
+    if (( $(echo "$mem_total_gb < $required_mem_gb" | bc -l) )); then
+        echo -e "\e[31m 内存不足: 当前系统内存为 ${mem_total_gb}GB，需要至少 ${required_mem_gb}GB 内存。\e[0m"
+        exit 1
+    else
+        echo -e "\e[32m 内存检查通过: 当前系统内存为 ${mem_total_gb}GB。\e[0m"
+    fi
+}
+
 
 printPushHelp() {
 	printf "[WARN] 请输入你要上传的物料.\n\n"
