@@ -143,7 +143,7 @@ helm_image: "{{ image_repository }}/helm-toolbox:{{ helm_release }}"
 #######################
 # StorageClass Options
 #######################
-enable_nfs: "yes"
+enable_nfs: "no"
 enable_nfs_csi: "{{ enable_nfs }}"
 
 nfs_cidr: "*"
