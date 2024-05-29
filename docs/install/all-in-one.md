@@ -51,6 +51,8 @@
     修改 yum_baseurl: “” 为本地 yum 仓库地址
     yum_baseurl: "http://192.168.16.210:58000/repository/pixiuio-centos"
 
+    修改 image_repository_container: “” 为本地 repository_container 仓库地址
+    image_repository_container: "192.168.16.210:58001"
     ```
 
 5. 执行如下命令，进行 `kubernetes` 的依赖安装
