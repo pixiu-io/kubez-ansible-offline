@@ -147,14 +147,14 @@ version = 2
       [plugins."io.containerd.grpc.v1.cri".registry.auths]
 
       [plugins."io.containerd.grpc.v1.cri".registry.configs]
-        [plugins."io.containerd.grpc.v1.cri".registry.configs."{{ image_repository_daemon }}".tls]
+        [plugins."io.containerd.grpc.v1.cri".registry.configs."{{ image_repository_container }}".tls]
           insecure_skip_verify = false
 
       [plugins."io.containerd.grpc.v1.cri".registry.headers]
 
       [plugins."io.containerd.grpc.v1.cri".registry.mirrors]
-        [plugins."io.containerd.grpc.v1.cri".registry.mirrors."{{ image_repository_daemon }}"]
-          endpoint = ["{{ image_repository_daemon }}"]
+        [plugins."io.containerd.grpc.v1.cri".registry.mirrors."{{ image_repository_container }}"]
+          endpoint = ["http://{{ image_repository_container }}"]
 
     [plugins."io.containerd.grpc.v1.cri".x509_key_pair_streaming]
       tls_cert_file = ""
