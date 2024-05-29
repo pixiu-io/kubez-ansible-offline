@@ -148,6 +148,7 @@ version = 2
 
       [plugins."io.containerd.grpc.v1.cri".registry.configs]
         [plugins."io.containerd.grpc.v1.cri".registry.configs."{{ image_repository_daemon }}".tls]
+          insecure_skip_verify = false
 
       [plugins."io.containerd.grpc.v1.cri".registry.headers]
 
