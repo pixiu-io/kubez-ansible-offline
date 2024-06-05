@@ -12,8 +12,30 @@ This session has been tested on Centos7 which supported by python2.7
 Learn about Kubez Ansible by reading the documentation online [kubez-ansible](https://www.bilibili.com/video/BV1L84y1h7LE/).
 
 ## Supported Components
+
+
 - 离线包准备
   - [离线包准备](docs/install/offline.md)
+  
+  版本清单
+
+  <table>
+  <tr>
+      <td height="30px"></td>
+      <td height="30px">操作系统</td>
+      <td height="30px">离线包下载链接</td>
+  </tr>
+  <tr>
+      <td rowspan="2" height="30px">1.26.15</td>
+      <td height="30px">centos7</td>
+      <td height="30px"><a href="/docs/install/resource.md# 1.26.15">获取</a></td>
+  </tr>
+  <tr>
+      <td height="30px">  </td>
+      <td height="30px">  </td>
+  </tr>
+  </table>
+
 
 - 集群指南
   - [单节点集群](docs/install/all-in-one.md) 单节点集群的快速部署
@@ -54,6 +76,7 @@ Learn about Kubez Ansible by reading the documentation online [kubez-ansible](ht
   - [Localstorage](https://github.com/caoyingjunz/csi-driver-localstorage)
   - [Pixiu-autoscaler](https://github.com/caoyingjunz/pixiu-autoscaler)
   - [PodSet](https://github.com/caoyingjunz/podset-operator)
+
 
 ## 学习分享
 - [go-learning](https://github.com/caoyingjunz/go-learning)
