@@ -1,6 +1,9 @@
 {
   "insecure-registries": ["{{ image_repository_daemon }}"],
   "exec-opts": ["native.cgroupdriver=systemd"],
+  {% if docker_data_dir %}
+  "data-root": "{{ docker_data_dir }}",
+  {% endif %}
   "log-driver": "json-file",
   "log-opts": {
     "max-size": "100m"
