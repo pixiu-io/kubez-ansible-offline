@@ -16,10 +16,10 @@ Learn about Kubez Ansible by reading the documentation online [kubez-ansible](ht
 - 离线包准备
   - 版本清单
 
-| Syntax      | Description | Test Text     |
-| :---        |    :----:   |          ---: |
-| Header      | Title       | Here's this   |
-| Paragraph   | Text        | And more      |
+| 操作系统      | 支持版本 | 资源链接     |
+| :---        |    :----:     |          ---: |
+| Centos      | 1.26.15       | Here's this   |
+| Centos      | 1.23.17       | And more      |
 
   - [离线包准备](docs/install/offline.md)
 
