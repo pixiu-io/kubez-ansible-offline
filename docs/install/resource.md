@@ -1,18 +1,22 @@
 # 1.26.15 资源链接
 
 - 加速链接
-- 备用链接
-
 ```shell
-http://nas.puzhihao.cn:28080/pixiu/1.26.15/
+
+# 下载 nexus
+wget https://pixiu.study-k8s.com/nexus.tar.gz
+
+#下载 rpm
+wget https://pixiu.study-k8s.com/k8s-centos7-v1.26.15-rpm.tar.gz
+
+#下载 images
+wget https://pixiu.study-k8s.com/k8s-centos7-v1.26.15_images.tar.gz
 ```
 
 # 1.23.17 资源链接
 
 - 加速链接
 
-- 备用链接
+# 备用链接
 
-```shell
-http://nas.puzhihao.cn:28080/pixiu/1.23.17/
-```
+[备用链接](http://nas.puzhihao.cn:28080/pixiu/1)
