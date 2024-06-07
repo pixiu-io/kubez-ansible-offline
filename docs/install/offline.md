@@ -16,7 +16,6 @@ curl https://raw.githubusercontent.com/pixiu-io/kubez-ansible-offline/master/too
   base.sh  k8s-centos7-v1.26.15_images.tar.gz  k8s-centos7-v1.26.15-rpm.tar.gz  kubez-ansible-offline-master.zip  nexus.tar.gz
   ```
 
-
 ## 部署机操作
 
 ### 部署私有仓库
