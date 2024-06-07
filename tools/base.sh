@@ -274,7 +274,7 @@ function printhelp() {
 
     # 定义命令和描述的数组
     commands=("install" "push" "kubezansible")
-    descriptions=("安装前置服务" "推送k8s镜像和rpm包" "安装kubez-ansible")
+    descriptions=("安装所有" "安装前置服务" "推送k8s镜像和rpm包" "安装kubez-ansible")
 
     # 遍历数组并打印每个命令和描述
     for i in "${!commands[@]}"; {
