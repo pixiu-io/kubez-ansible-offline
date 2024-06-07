@@ -19,4 +19,4 @@ wget https://pixiu.study-k8s.com/k8s-centos7-v1.26.15_images.tar.gz
 
 # 备用链接
 
-[备用链接](http://nas.puzhihao.cn:28080/pixiu/1)
+[备用链接](http://nas.puzhihao.cn:28080/pixiu/)
