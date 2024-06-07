@@ -16,22 +16,10 @@ Learn about Kubez Ansible by reading the documentation online [kubez-ansible](ht
 - 离线包准备
   - 版本清单
 
-  <table>
-  <tr>
-      <td height="30px"></td>
-      <td height="30px">操作系统</td>
-      <td height="30px">离线包下载链接</td>
-  </tr>
-  <tr>
-      <td rowspan="2" height="30px">1.26.15</td>
-      <td height="30px">centos7</td>
-      <td height="30px"><a href="/docs/install/resource.md# 1.26.15">获取</a></td>
-  </tr>
-  <tr>
-      <td height="30px">  </td>
-      <td height="30px">  </td>
-  </tr>
-  </table>
+| Syntax      | Description | Test Text     |
+| :---        |    :----:   |          ---: |
+| Header      | Title       | Here's this   |
+| Paragraph   | Text        | And more      |
 
   - [离线包准备](docs/install/offline.md)
 
