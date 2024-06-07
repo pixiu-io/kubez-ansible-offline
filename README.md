@@ -13,11 +13,10 @@ Learn about Kubez Ansible by reading the documentation online [kubez-ansible](ht
 
 ## Supported Components
 
-
 - 离线包准备
   - [离线包准备](docs/install/offline.md)
-  
-  版本清单
+
+  - 版本清单
 
   <table>
   <tr>
@@ -35,7 +34,6 @@ Learn about Kubez Ansible by reading the documentation online [kubez-ansible](ht
       <td height="30px">  </td>
   </tr>
   </table>
-
 
 - 集群指南
   - [单节点集群](docs/install/all-in-one.md) 单节点集群的快速部署
@@ -76,7 +74,6 @@ Learn about Kubez Ansible by reading the documentation online [kubez-ansible](ht
   - [Localstorage](https://github.com/caoyingjunz/csi-driver-localstorage)
   - [Pixiu-autoscaler](https://github.com/caoyingjunz/pixiu-autoscaler)
   - [PodSet](https://github.com/caoyingjunz/podset-operator)
-
 
 ## 学习分享
 - [go-learning](https://github.com/caoyingjunz/go-learning)
