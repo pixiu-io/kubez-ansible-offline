@@ -12,7 +12,27 @@ This session has been tested on Centos7 which supported by python2.7
 Learn about Kubez Ansible by reading the documentation online [kubez-ansible](https://www.bilibili.com/video/BV1L84y1h7LE/).
 
 ## Supported Components
+
 - 离线包准备
+  - 版本清单
+
+  <table>
+  <tr>
+      <td height="30px"></td>
+      <td height="30px">操作系统</td>
+      <td height="30px">离线包下载链接</td>
+  </tr>
+  <tr>
+      <td rowspan="2" height="30px">1.26.15</td>
+      <td height="30px">centos7</td>
+      <td height="30px"><a href="/docs/install/resource.md# 1.26.15">获取</a></td>
+  </tr>
+  <tr>
+      <td height="30px">  </td>
+      <td height="30px">  </td>
+  </tr>
+  </table>
+
   - [离线包准备](docs/install/offline.md)
 
 - 集群指南
