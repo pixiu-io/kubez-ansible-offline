@@ -14,8 +14,6 @@ Learn about Kubez Ansible by reading the documentation online [kubez-ansible](ht
 ## Supported Components
 
 - 离线包准备
-  - [离线包准备](docs/install/offline.md)
-
   - 版本清单
 
   <table>
@@ -34,6 +32,8 @@ Learn about Kubez Ansible by reading the documentation online [kubez-ansible](ht
       <td height="30px">  </td>
   </tr>
   </table>
+
+  - [离线包准备](docs/install/offline.md)
 
 - 集群指南
   - [单节点集群](docs/install/all-in-one.md) 单节点集群的快速部署
