@@ -14,6 +14,7 @@ Learn about Kubez Ansible by reading the documentation online [kubez-ansible](ht
 ## Supported Components
 
 - 离线包准备
+
   - 版本清单
 
   | 操作系统      | 支持版本 | 资源链接 |
