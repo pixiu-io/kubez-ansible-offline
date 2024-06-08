@@ -3,12 +3,12 @@
 ## 离线包获取
 ### 获取 `base.sh` 初始化脚本
 ```shell
-#（可选）自动获取，网络通时，通过 curl 命令直接获取脚本到本地
+###（可选）自动获取，网络通时，通过 curl 命令直接获取脚本到本地
 curl https://raw.githubusercontent.com/pixiu-io/kubez-ansible-offline/master/tools/base.sh -o base.sh
 
-# 手动获取
-# 自动获取失败时使用，一般因为网络不通或者未安装 curl 命令
-# 拷贝项目的 tools/base.sh, 并保存为 base.sh
+### 手动获取
+### 自动获取失败时使用，一般因为网络不通或者未安装 curl 命令
+### 拷贝项目的 tools/base.sh, 并保存为 base.sh
 ```
 
 ### 下载离线包
