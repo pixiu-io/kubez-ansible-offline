@@ -15,10 +15,10 @@ curl https://codeload.github.com/pixiu-io/kubez-ansible-offline/zip/refs/heads/m
 ### 1.26.15
 - 加速链接
 ```shell
-# 下载 rpm
+### 下载 rpm
 wget https://pixiu.study-k8s.com/k8s-centos7-v1.26.15-rpm.tar.gz
 
-# 下载 images
+### 下载 images
 wget https://pixiu.study-k8s.com/k8s-centos7-v1.26.15_images.tar.gz
 ```
 

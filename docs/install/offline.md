@@ -6,7 +6,7 @@
 #（可选）自动获取，网络通时，通过 curl 命令直接获取脚本到本地
 curl https://raw.githubusercontent.com/pixiu-io/kubez-ansible-offline/master/tools/base.sh -o base.sh
 
-# 手动获取，
+# 手动获取
 # 自动获取失败时使用，一般因为网络不通或者未安装 curl 命令
 # 拷贝项目的 tools/base.sh, 并保存为 base.sh
 ```
@@ -34,8 +34,8 @@ base.sh  k8s-centos7-v1.26.15_images.tar.gz  k8s-centos7-v1.26.15-rpm.tar.gz  ku
   ```shell
   vim base.sh
   # 修改为本机 IP 地址
-  LOCALIP="localhost"     
-  
+  LOCALIP="localhost"
+
   # 镜像版本，即k8s的版本号
   IMAGETAG="1.26.15"
   ```
