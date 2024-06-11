@@ -18,6 +18,11 @@ IMAGETAG="1.26.15"
 PKGPWD=$(pwd)
 
 
+
+# rpm url
+RPMURL="http://$LOCALIP:58000/repository/pixiuio-centos/repodata/repomd.xml"
+
+
 # 判断LOCALIP是否修改
 function print_change_ip() {
     if [ "$LOCALIP" = "localhost" ]; then
@@ -68,10 +73,39 @@ function check_memory() {
 }
 
 
+function wait_nexus_url() {
+    local number=0
+    while true;do
+        HTTP_STATUS=$(curl -o /dev/null -s -w "%{http_code}" $RPMURL)
+        # 如果状态码是200
+        if [ "$HTTP_STATUS" -eq 200 ]; then
+           log true  "rpm仓库已经正常"
+           return 0
+        else
+        # 如果状态码不是 200，则继续执行
+          log info "rpm仓库正在启动中，请稍后"
+
+        number=$((number+1))
+        if [ "$number" -ge 200 ]; then
+           log error "rpm启动失败,请检查nexus相关物料是否下载正确"
+        exit 1
+    fi
+    fi
+        # 等待5秒后，重试
+        sleep 5
+
+    done
+}
+
+
+
+
+
 
 # 安装nexus
 function install_nexus() {
 	check_memory
+	print_change_ip
 	curl localhost:58000>/dev/null  2>&1
     if [ $? -eq 0 ]; then
         log info "nexus服务已经安装"
@@ -91,6 +125,7 @@ function install_nexus() {
     line=`cat /etc/rc.d/rc.local|grep "bash nexus.sh start"|wc -l`
     if [ "$line" -eq 0 ]; then
         # 写入开机自启动
+        chmod +x /etc/rc.d/rc.local
        echo 'cd /data/nexus_local &&  bash nexus.sh start' >> /etc/rc.d/rc.local
     fi
 
@@ -132,6 +167,7 @@ function push_nexus_image() {
         [ ! -f "./k8s-centos7-v${IMAGETAG}_images.tar.gz" ] && log error  "base.sh 128行： k8s-centos7-v${IMAGETAG}_images.tar.gz文件不存在,请检查相关文件是否存在" && exit 1
         log info "开始解压k8s-centos7-v${IMAGETAG}_images.tar.gz"
         tar -zxvf k8s-centos7-v${IMAGETAG}_images.tar.gz
+        sleep 5
     fi
 
 
@@ -195,6 +231,9 @@ function kubez_ansible_repo() {
     # 判断nexus服务是否启动
     install_nexus
 
+    # 等待下，nexus完全启动
+    sleep 10
+
     # 判断 /etc/yum.repos.d.bak 是否存在
 	[ -d "/etc/yum.repos.d.bak" ] && log info "/etc/yum.repos.d.bak  备份目录存在，无需备份" && return 0
 	log info
@@ -210,7 +249,10 @@ enabled=1
 gpgcheck=0
 EOF
 
-	log info "\n" && yum clean all && rm -rf /var/cache/yum/* && yum makecache && echo -e "\n" && log info "repo 仓库修改完成"
+    wait_nexus_url
+    log info "/etc/yum.repos.d/offline.repo 文件创建成功"
+
+	log info "\n" && yum clean all  && yum makecache && echo -e "\n" && log info "repo 仓库修改完成"
 }
 
 function kubez_ansible_install() {
@@ -223,7 +265,7 @@ function kubez_ansible_install() {
 
     if command -v "kubez-ansible" >/dev/null; then
 		log true "kubez-ansible 命令安装完成"
-		exit 1
+		return 0
 	else
 		cd $PKGPWD
 		# 安装依赖包
@@ -232,10 +274,11 @@ function kubez_ansible_install() {
 		    [ ! -f "./kubez-ansible-offline-master.zip" ] &&  log error  "base.sh 228:     kubez-ansible-offline-master.zip文件不存在,请下载" && exit 1
 
 		fi
-        unzip kubez-ansible-offline-master.zip
 		yum makecache
 		yum -y install ansible unzip python2-pip
 		# 解压 kubez-ansible 包
+
+        unzip kubez-ansible-offline-master.zip
 
         log info
         cd kubez-ansible-offline-master
@@ -247,8 +290,8 @@ function kubez_ansible_install() {
         log info
         python setup.py install
 
-        cp -r etc/kubez/ /etc/
-        cp ansible/inventory/multinode ~
+        cp -rf etc/kubez/ /etc/
+        cp -rf ansible/inventory/multinode ~
         cd ~
 
         log info
@@ -273,7 +316,7 @@ function printhelp() {
     echo "Available Commands:"
 
     # 定义命令和描述的数组
-    commands=("install" "push" "kubezansible")
+    commands=("all" "install" "push" "kubezansible")
     descriptions=("安装所有" "安装前置服务" "推送k8s镜像和rpm包" "安装kubez-ansible")
 
     # 遍历数组并打印每个命令和描述
