@@ -52,26 +52,11 @@ def get_runtime_type(ctx, *args, **kwargs):
     return RUNTIME_MAP[kube_group]
 
 
-def find_custom_repo(ctx, *args, **kwargs):
-    dest = kwargs.get('dest')
-    repo_dir = kwargs.get('repo_dir')
-
-    parts = dest.split('/')
-    repo_name = parts[len(parts) - 1]
-
-    custom_repo = os.path.join(repo_dir, repo_name)
-    if os.path.exists(custom_repo):
-        return custom_repo
-    else:
-        return ctx
-
-
 class FilterModule(object):
     '''Kubez-ansible custom jinja2 filters '''
 
     def filters(self):
         return {
             'to_socket': to_socket,
-            'get_runtime_type': get_runtime_type,
-            'find_custom_repo': find_custom_repo
+            'get_runtime_type': get_runtime_type
         }
