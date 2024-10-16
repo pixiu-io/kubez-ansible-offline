@@ -17,8 +17,8 @@ curl https://raw.githubusercontent.com/pixiu-io/kubez-ansible-offline/master/too
 
 | 支持版本 | 操作系统 | 资源链接 |
 | :---        |    :----:     |          ---: |
-| 1.26.15     | Centos | [1.26.15](docs/install/resource.md)   |
-| 1.23.17     | Centos  | [1.23.17](docs/install/resource.md)   |
+| 1.26.15     | Centos | [1.26.15](resource.md)   |
+| 1.23.17     | Centos  | [1.23.17](resource.md)   |
 
 ### 拷贝所有包至内网部署机
 ```shell
