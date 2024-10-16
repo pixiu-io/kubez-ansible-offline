@@ -12,12 +12,58 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from kubez_ansible.to_socket import to_socket
-from kubez_ansible.get_runtime_type import get_runtime_type
+import os
 
 DOCUMENTATION = '''
 author: Caoyingjun
 '''
+
+RUNTIME_MAP = {
+    'docker-master': 'docker',
+    'containerd-master': 'containerd',
+    'docker-node': 'docker',
+    'containerd-node': 'containerd'
+}
+
+SOCKET_MAP = {
+    'docker': '',
+    'containerd': '--cri-socket /run/containerd/containerd.sock'
+}
+
+
+def to_socket(ctx, *args, **kwargs):
+    kube_group = kwargs.get('kube_group')
+
+    if kube_group.startswith('dokcer'):
+        runtime_type = 'docker'
+    elif kube_group.startswith('containerd'):
+        runtime_type = 'containerd'
+    else:
+        runtime_type = ''
+
+    if not runtime_type:
+        return ctx
+
+    return ' '.join([ctx, SOCKET_MAP[runtime_type]])
+
+
+def get_runtime_type(ctx, *args, **kwargs):
+    kube_group = kwargs.get('kube_group')
+    return RUNTIME_MAP[kube_group]
+
+
+def find_custom_repo(ctx, *args, **kwargs):
+    dest = kwargs.get('dest')
+    repo_dir = kwargs.get('repo_dir')
+
+    parts = dest.split('/')
+    repo_name = parts[len(parts) - 1]
+
+    custom_repo = os.path.join(repo_dir, repo_name)
+    if os.path.exists(custom_repo):
+        return custom_repo
+    else:
+        return ctx
 
 
 class FilterModule(object):
@@ -26,5 +72,6 @@ class FilterModule(object):
     def filters(self):
         return {
             'to_socket': to_socket,
-            'get_runtime_type': get_runtime_type
+            'get_runtime_type': get_runtime_type,
+            'find_custom_repo': find_custom_repo
         }
