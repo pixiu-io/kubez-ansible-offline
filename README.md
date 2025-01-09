@@ -21,7 +21,6 @@ Learn about Kubez Ansible by reading the documentation online [kubez-ansible](ht
          | :---        |    :----:     |          ---: |
          | 1.26.15     | Centos | [1.26.15](docs/install/resource.md)   |
 
-
     - [部署前准备](docs/install/offline.md)
 
 - 集群指南
