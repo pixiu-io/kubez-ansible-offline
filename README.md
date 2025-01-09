@@ -20,7 +20,7 @@ Learn about Kubez Ansible by reading the documentation online [kubez-ansible](ht
          | 支持版本 | 操作系统 | 资源链接 |
          | :---        |    :----:     |          ---: |
          | 1.26.15     | Centos | [1.26.15](docs/install/resource.md)   |
-         | 1.23.17     | Centos  | [1.23.17](docs/install/resource.md)   |
+
 
     - [部署前准备](docs/install/offline.md)
 
